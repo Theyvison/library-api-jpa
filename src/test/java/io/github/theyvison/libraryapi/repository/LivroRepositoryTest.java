@@ -3,6 +3,7 @@ package io.github.theyvison.libraryapi.repository;
 import io.github.theyvison.libraryapi.model.Autor;
 import io.github.theyvison.libraryapi.model.GeneroLivro;
 import io.github.theyvison.libraryapi.model.Livro;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -55,5 +56,23 @@ class LivroRepositoryTest {
         livro.setAutor(autor);
 
         livroRepository.save(livro);
+    }
+
+    @Test
+    void atualizarAutorDoLivro() {
+        var idLivro = UUID.fromString("952e56f4-db95-45f2-95bc-9aab3b9d2048");
+        var livroParaAtualizar = livroRepository.findById(idLivro).orElse(null);
+
+        var idAutor = UUID.fromString("25335a11-c2a6-467d-9a23-6dfc9fab6cda");
+        Autor novoAutor = autorRepository.findById(idAutor).orElse(null);
+
+        livroParaAtualizar.setAutor(novoAutor);
+        livroRepository.save(livroParaAtualizar);
+    }
+
+    @Test
+    void deletar() {
+        var idLivro = UUID.fromString("952e56f4-db95-45f2-95bc-9aab3b9d2048");
+        livroRepository.deleteById(idLivro);
     }
 }
