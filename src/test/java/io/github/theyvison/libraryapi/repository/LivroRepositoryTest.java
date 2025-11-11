@@ -37,4 +37,23 @@ class LivroRepositoryTest {
 
         livroRepository.save(livro);
     }
+
+    @Test
+    void salvarCascadeTest() {
+        Livro livro = new Livro();
+        livro.setIsbn("58413-99856");
+        livro.setPreco(BigDecimal.valueOf(100));
+        livro.setGenero(GeneroLivro.FICCAO);
+        livro.setTitulo("Outro livro");
+        livro.setDataPublicacao(LocalDate.of(1999, 4, 16));
+
+        Autor autor = new Autor();
+        autor.setNome("João");
+        autor.setNacionalidade("Brasileira");
+        autor.setDataNascimento(LocalDate.of(1960, 8, 11));
+
+        livro.setAutor(autor);
+
+        livroRepository.save(livro);
+    }
 }
