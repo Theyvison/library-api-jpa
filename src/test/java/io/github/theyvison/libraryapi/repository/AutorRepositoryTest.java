@@ -3,6 +3,7 @@ package io.github.theyvison.libraryapi.repository;
 import io.github.theyvison.libraryapi.model.Autor;
 import io.github.theyvison.libraryapi.model.GeneroLivro;
 import io.github.theyvison.libraryapi.model.Livro;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -104,5 +105,16 @@ public class AutorRepositoryTest {
 
         autorRepository.save(autor);
         livroRepository.saveAll(autor.getLivros());
+    }
+
+    @Test
+    void listarLivrosAutor() {
+        var id = UUID.fromString("6cdaa735-37d2-4928-8ce2-43b6bc44ee73");
+        var autor = autorRepository.findById(id).get();
+
+        List<Livro> listaLivros = livroRepository.findByAutor(autor);
+        autor.setLivros(listaLivros);
+
+        autor.getLivros().forEach(System.out::println);
     }
 }
