@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @SpringBootTest
@@ -85,5 +86,22 @@ class LivroRepositoryTest {
         System.out.println(livro.getTitulo());
         System.out.println("Autor(a):");
         System.out.println(livro.getAutor().getNome());
+    }
+
+    @Test
+    void pesquisaPorTituloTest() {
+        List<Livro> lista = livroRepository.findByTitulo("O roubo da casa assombrada");
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    void pesquisaPorIsbnTest() {
+        List<Livro> lista = livroRepository.findByIsbn("84562-21428");
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    void pesquisaPorTituloEPreco() {
+        List<Livro> lista = livroRepository.findByTituloAndPreco("P.E.M.A.N", BigDecimal.valueOf(100.00));
     }
 }
