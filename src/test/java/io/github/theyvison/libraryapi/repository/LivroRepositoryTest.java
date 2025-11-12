@@ -4,13 +4,11 @@ import io.github.theyvison.libraryapi.model.Autor;
 import io.github.theyvison.libraryapi.model.GeneroLivro;
 import io.github.theyvison.libraryapi.model.Livro;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.UUID;
 
