@@ -1,9 +1,11 @@
 package io.github.theyvison.libraryapi.repository;
 
 import io.github.theyvison.libraryapi.model.Autor;
+import io.github.theyvison.libraryapi.model.GeneroLivro;
 import io.github.theyvison.libraryapi.model.Livro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,4 +37,10 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
         order by l.genero
     """)
     List<String> listarGenerosAutoresBrasileiros();
+
+    @Query("select l from Livro l where l.genero = :genero order by :paramOrdenacao")
+    List<Livro> findByGenero(@Param("genero") GeneroLivro generoLivro, @Param("paramOrdenacao") String nomeParam);
+
+    @Query("select l from Livro l where l.genero = ?1 order by ?1")
+    List<Livro> findByGeneroParametroPosicional(GeneroLivro generoLivro, String nomeParam);
 }

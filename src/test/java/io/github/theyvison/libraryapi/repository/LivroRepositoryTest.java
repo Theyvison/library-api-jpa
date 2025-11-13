@@ -101,31 +101,43 @@ class LivroRepositoryTest {
     }
 
     @Test
-    void pesquisaPorTituloEPreco() {
+    void pesquisaPorTituloEPrecoTest() {
         List<Livro> lista = livroRepository.findByTituloAndPreco("P.E.M.A.N", BigDecimal.valueOf(100.00));
     }
 
     @Test
-    void listarLivrosComQueryJPQL() {
+    void listarLivrosComQueryJPQLTest() {
         var resultado = livroRepository.listarTodosOrdenadoPorTituloEPreco();
         resultado.forEach(System.out::println);
     }
 
     @Test
-    void listarAutoresDosLivros() {
+    void listarAutoresDosLivrosTest() {
         var resultado = livroRepository.listarAutoresDosLivros();
         resultado.forEach(System.out::println);
     }
 
     @Test
-    void listarTitulosNaoRepetidosDosLivros() {
+    void listarTitulosNaoRepetidosDosLivrosTest() {
         var resultado = livroRepository.listarNomesDiferentesLivros();
         resultado.forEach(System.out::println);
     }
 
     @Test
-    void listarGenerosDeLivrosDeAutoresBrasileiros() {
+    void listarGenerosDeLivrosDeAutoresBrasileirosTest() {
         var resultado = livroRepository.listarGenerosAutoresBrasileiros();
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarPorGeneroQueryParamTest() {
+        var resultado = livroRepository.findByGenero(GeneroLivro.MISTERIO, "preco");
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarPorGeneroQueryPositionalParamTest() {
+        var resultado = livroRepository.findByGeneroParametroPosicional(GeneroLivro.MISTERIO, "preco");
         resultado.forEach(System.out::println);
     }
 }
