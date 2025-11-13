@@ -104,4 +104,28 @@ class LivroRepositoryTest {
     void pesquisaPorTituloEPreco() {
         List<Livro> lista = livroRepository.findByTituloAndPreco("P.E.M.A.N", BigDecimal.valueOf(100.00));
     }
+
+    @Test
+    void listarLivrosComQueryJPQL() {
+        var resultado = livroRepository.listarTodosOrdenadoPorTituloEPreco();
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarAutoresDosLivros() {
+        var resultado = livroRepository.listarAutoresDosLivros();
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarTitulosNaoRepetidosDosLivros() {
+        var resultado = livroRepository.listarNomesDiferentesLivros();
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarGenerosDeLivrosDeAutoresBrasileiros() {
+        var resultado = livroRepository.listarGenerosAutoresBrasileiros();
+        resultado.forEach(System.out::println);
+    }
 }
