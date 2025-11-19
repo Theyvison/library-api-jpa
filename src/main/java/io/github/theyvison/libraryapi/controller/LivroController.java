@@ -1,16 +1,16 @@
 package io.github.theyvison.libraryapi.controller;
 
 import io.github.theyvison.libraryapi.controller.dto.CadastroLivroDTO;
+import io.github.theyvison.libraryapi.controller.dto.ResultadoPesquisaLivroDTO;
 import io.github.theyvison.libraryapi.controller.mappers.LivroMapper;
 import io.github.theyvison.libraryapi.model.Livro;
 import io.github.theyvison.libraryapi.service.LivroService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("livros")
@@ -26,5 +26,13 @@ public class LivroController implements GenericController {
         livroService.salvar(livro);
         var url = gerarHeaderLocation(livro.getId());
         return ResponseEntity.created(url).build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResultadoPesquisaLivroDTO> obterDetalhes(@PathVariable("id") String id) {
+        return livroService.obterPorId(UUID.fromString(id)).map(livro -> {
+            var dto = livroMapper.toDTO(livro);
+            return ResponseEntity.ok(dto);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
