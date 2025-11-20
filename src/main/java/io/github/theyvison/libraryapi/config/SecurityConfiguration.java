@@ -1,6 +1,8 @@
 package io.github.theyvison.libraryapi.config;
 
+import io.github.theyvison.libraryapi.repository.AutorRepository;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,16 +21,19 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AutorRepository autorRepository) throws Exception {
         return http
-                .csrf(AbstractHttpConfigurer::disable) // diabilita CSRF para facilitar testes com Postman
-                //.formLogin(Customizer.withDefaults()) // habilita form login padrão do Spring Security
+                .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(configurer -> {
-                        configurer.loginPage("/login").permitAll();
-                })// página de login personalizada
-                .httpBasic(Customizer.withDefaults()) // habilita autenticação HTTP Basic
-                .authorizeHttpRequests(authorize ->
-                        authorize.anyRequest().authenticated()) // todas as requisições exigem autenticação
+                    configurer.loginPage("/login").permitAll();
+                })
+                .httpBasic(Customizer.withDefaults())
+                .authorizeHttpRequests(authorize -> {
+                    authorize.requestMatchers("/login/**").permitAll();
+                    authorize.requestMatchers("/autores/**").hasRole("ADMIN");
+                    authorize.requestMatchers("/livros/**").hasAnyRole("USER", "ADMIN");
+                    authorize.anyRequest().authenticated();
+                })
                 .build();
     }
 
