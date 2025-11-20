@@ -16,7 +16,10 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable) // diabilita CSRF para facilitar testes com Postman
-                .formLogin(Customizer.withDefaults()) // habilita form login padrão do Spring Security
+                //.formLogin(Customizer.withDefaults()) // habilita form login padrão do Spring Security
+                .formLogin(configurer -> {
+                        configurer.loginPage("/login").permitAll();
+                })// página de login personalizada
                 .httpBasic(Customizer.withDefaults()) // habilita autenticação HTTP Basic
                 .authorizeHttpRequests(authorize ->
                         authorize.anyRequest().authenticated()) // todas as requisições exigem autenticação
