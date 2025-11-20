@@ -1,5 +1,6 @@
 package io.github.theyvison.libraryapi.validator;
 
+import io.github.theyvison.libraryapi.exceptions.CampoInvalidoException;
 import io.github.theyvison.libraryapi.exceptions.RegistroDuplicadoException;
 import io.github.theyvison.libraryapi.model.Livro;
 import io.github.theyvison.libraryapi.repository.LivroRepository;
@@ -12,11 +13,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LivroValidator {
 
+    private static final int ANO_EXIGENCIA_PRECO = 2020;
     private final LivroRepository livroRepository;
 
     public void validar(Livro livro) {
         if (existeLivroComIsbn(livro)) {
             throw new RegistroDuplicadoException("ISBN já cadastrado");
+        }
+
+        if (isPrecoObrigatorioNulo(livro)) {
+            throw new CampoInvalidoException("preco", "Para livros com ano de publicação a partir de 2020 o preço é obrigatório");
         }
     }
 
@@ -31,5 +37,9 @@ public class LivroValidator {
                 .map(Livro::getId)
                 .stream()
                 .anyMatch(id -> !id.equals(livro.getId()));
+    }
+
+    private boolean isPrecoObrigatorioNulo(Livro livro) {
+        return livro.getPreco() == null && livro.getDataPublicacao().getYear() >= ANO_EXIGENCIA_PRECO;
     }
 }
