@@ -3,6 +3,7 @@ package io.github.theyvison.libraryapi.config;
 import org.springframework.http.HttpMethod;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.context.annotation.Configuration;
 import io.github.theyvison.libraryapi.service.UsuarioService;
@@ -57,5 +58,10 @@ public class SecurityConfiguration {
                 .build();
         */
         return new CustomUserDetailsService(usuarioService);
+    }
+
+    @Bean
+    public GrantedAuthorityDefaults grantedAuthorityDefaults() {
+        return new GrantedAuthorityDefaults("");
     }
 }
