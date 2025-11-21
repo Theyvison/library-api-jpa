@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import io.github.theyvison.libraryapi.model.Usuario;
 import org.springframework.security.core.Authentication;
 import io.github.theyvison.libraryapi.service.UsuarioService;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @Component
