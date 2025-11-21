@@ -2,8 +2,10 @@ package io.github.theyvison.libraryapi.service;
 
 import io.github.theyvison.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import io.github.theyvison.libraryapi.model.Autor;
+import io.github.theyvison.libraryapi.model.Usuario;
 import io.github.theyvison.libraryapi.repository.AutorRepository;
 import io.github.theyvison.libraryapi.repository.LivroRepository;
+import io.github.theyvison.libraryapi.security.SecurityService;
 import io.github.theyvison.libraryapi.validator.AutorValidador;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
@@ -20,9 +22,12 @@ public class AutorService {
     private final AutorRepository autorRepository;
     private final AutorValidador autorValidador;
     private final LivroRepository livroRepository;
+    private final SecurityService securityService;
 
     public Autor salvar(Autor autor) {
         autorValidador.validar(autor);
+        Usuario usuario = securityService.obterUsuarioLogado();
+        autor.setUsuario(usuario);
         return autorRepository.save(autor);
     }
 

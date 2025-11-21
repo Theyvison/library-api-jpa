@@ -2,7 +2,9 @@ package io.github.theyvison.libraryapi.service;
 
 import io.github.theyvison.libraryapi.model.GeneroLivro;
 import io.github.theyvison.libraryapi.model.Livro;
+import io.github.theyvison.libraryapi.model.Usuario;
 import io.github.theyvison.libraryapi.repository.LivroRepository;
+import io.github.theyvison.libraryapi.security.SecurityService;
 import io.github.theyvison.libraryapi.validator.LivroValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,9 +24,12 @@ public class LivroService {
 
     private final LivroRepository livroRepository;
     private final LivroValidator livroValidator;
+    private final SecurityService securityService;
 
     public Livro salvar(Livro livro) {
         livroValidator.validar(livro);
+        Usuario usuario = securityService.obterUsuarioLogado();
+        livro.setUsuario(usuario);
         return livroRepository.save(livro);
     }
 

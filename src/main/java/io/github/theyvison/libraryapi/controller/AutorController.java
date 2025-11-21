@@ -1,15 +1,15 @@
 package io.github.theyvison.libraryapi.controller;
 
-import jakarta.validation.Valid;
-import jakarta.servlet.ServletRequest;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import io.github.theyvison.libraryapi.controller.dto.AutorDTO;
+import io.github.theyvison.libraryapi.controller.mappers.AutorMapper;
 import io.github.theyvison.libraryapi.model.Autor;
 import io.github.theyvison.libraryapi.service.AutorService;
-import io.github.theyvison.libraryapi.controller.dto.AutorDTO;
+import jakarta.servlet.ServletRequest;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import io.github.theyvison.libraryapi.controller.mappers.AutorMapper;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
@@ -22,17 +22,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AutorController implements GenericController {
 
-    private final AutorService autorService;
     private final AutorMapper autorMapper;
+    private final AutorService autorService;
 
     @PostMapping
     @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<Void> salvar(@RequestBody @Valid AutorDTO dto) {
         Autor autor = autorMapper.toEntity(dto);
         autorService.salvar(autor);
-
         URI location = gerarHeaderLocation(autor.getId());
-
         return ResponseEntity.created(location).build();
     }
 
