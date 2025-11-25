@@ -5,6 +5,7 @@ import io.github.theyvison.libraryapi.security.LoginSocialSuccessHandler;
 import org.springframework.http.HttpMethod;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
@@ -26,7 +27,7 @@ public class SecurityConfiguration {
             HttpSecurity http,
             LoginSocialSuccessHandler loginSocialSuccessHandler,
             JwtCustomAuthenticationFilter jwtCustomAuthenticationFilter
-            ) throws Exception {
+    ) throws Exception {
 
         return http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -39,14 +40,27 @@ public class SecurityConfiguration {
                 })
                 .oauth2Login(oauth2 -> {
                     oauth2
-                        .loginPage("/login")
-                        .successHandler(loginSocialSuccessHandler);
+                            .loginPage("/login")
+                            .successHandler(loginSocialSuccessHandler);
                 })
                 .oauth2ResourceServer(oauth2RS ->
                         oauth2RS.jwt(Customizer.withDefaults()))
                 .addFilterAfter(jwtCustomAuthenticationFilter, BearerTokenAuthenticationFilter.class)
                 .build();
     }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring().requestMatchers(
+                "/v2/api-docs/**",
+                "/v3/api-docs/**",
+                "/swagger-resources/**",
+                "/swagger-ui.html",
+                "/swagger-ui/**",
+                "/webjars/**"
+        );
+    }
+
 
     @Bean
     public GrantedAuthorityDefaults grantedAuthorityDefaults() {
